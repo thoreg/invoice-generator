@@ -1,0 +1,26 @@
+[
+  {
+    "fields": {
+      "vendor_id": "no",
+      "name": "ebay_de"
+    },
+    "model": "sale.marketplace",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "vendor_id": "A1PA6795UKMFR9",
+      "name": "amazon_de"
+    },
+    "model": "sale.marketplace",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "vendor_id": "A13V1IB3VIYZZH",
+      "name": "amazon_fr"
+    },
+    "model": "sale.marketplace",
+    "pk": 3
+  }
+]

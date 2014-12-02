@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 #
 import logging
-from pprint import pprint
 
 from boto.mws.connection import MWSConnection
 
@@ -26,6 +25,7 @@ def get_list_of_orders(marketplace_name, start_datetime, end_datetime):
                                MarketplaceId=marketplace_id_list)
 
     '''
+    from pprint import pprint
     number_of_orders = len(response.ListOrdersResult.Orders.Order)
     total_order_sum = 0
 
@@ -84,7 +84,7 @@ def import_list_of_orders(list_of_orders):
                                                           postal_code=entry.ShippingAddress.PostalCode,
                                                           country_code=entry.ShippingAddress.CountryCode)
 
-        price_in_cent = int(entry.OrderTotal.Amount)*100
+        price_in_cent = int(entry.OrderTotal.Amount * 100)
         marketplace = Marketplace.objects.get(name='amazon_de')
 
         order, created = Order.objects.get_or_create(marketplace_order_id=entry.AmazonOrderId,
@@ -99,11 +99,11 @@ def import_list_of_orders(list_of_orders):
             log.info('order: {} already in the database'.format(order.marketplace_order_id))
 
 
-def get_all_orders(marketplace_name):
+def import_all_orders(marketplace_name):
     DATES = [("2014-09-01T00:00:00Z", "2014-10-01T00:00:00Z"),
              ("2014-10-01T00:00:00Z", "2014-11-01T00:00:00Z"),
              ("2014-11-01T00:00:00Z", "2014-12-01T00:00:00Z"),
-             ("2014-12-01T00:00:00Z", "2014-12-02T15:00:00Z")]
+             ("2014-12-01T00:00:00Z", "2014-12-02T22:00:00Z")]
 
     for start, end in DATES:
         print("{} {} {}".format(marketplace_name, start, end))

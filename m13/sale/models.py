@@ -5,7 +5,6 @@ class Address(models.Model):
     name = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     street = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=10)
     country_code = models.CharField(max_length=2)
 
@@ -28,4 +27,3 @@ class Order(models.Model):
 class Invoice(models.Model):
     order = models.ForeignKey(Order)
     creation_time = models.DateTimeField(auto_now_add=True)
-

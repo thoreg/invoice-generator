@@ -1,21 +1,17 @@
 # -*- coding: utf-8 -*-
 #
 import logging
-from decimal import Decimal
 from pprint import pprint
 
 from boto.mws.connection import MWSConnection
 
-from sale.models import Order, Address, Marketplace
+from sale.models import Address, Marketplace, Order
 
 MERCHANT_ID = "A27MO42EOV27PG"
 
 mws = MWSConnection(Merchant=MERCHANT_ID)
 mws.host = 'mws.amazonservices.de'
 
-DATES = [("2014-09-01T00:00:00Z", "2014-10-01T00:00:00Z"),
-         ("2014-10-01T00:00:00Z", "2014-11-01T00:00:00Z"),
-         ("2014-11-01T00:00:00Z", "2014-11-22T00:00:00Z")]
 
 log = logging.getLogger(__name__)
 
@@ -24,6 +20,7 @@ def get_list_of_orders(marketplace_name, start_datetime, end_datetime):
 
     marketplace_id_list = Marketplace.objects.filter(name=marketplace_name) \
                                              .values_list('vendor_id', flat=True)
+    print("  marketplace_id_list: {}".format(marketplace_id_list))
     response = mws.list_orders(CreatedAfter=start_datetime,
                                CreatedBefore=end_datetime,
                                MarketplaceId=marketplace_id_list)
@@ -47,26 +44,43 @@ def get_list_of_orders(marketplace_name, start_datetime, end_datetime):
     print "Umsatz (Netto): {0:>20.2f}".format(total_order_sum / Decimal(1.19))
     print
     '''
-
     return response.ListOrdersResult.Orders.Order
 
 
 def import_list_of_orders(list_of_orders):
 
     for entry in list_of_orders:
+
+        log.debug("\nEntry: ")
+        log.debug(entry.__dict__)
+
+        if entry.OrderStatus == 'Canceled':
+            log.info('order: {} canceled - skipping'.format(entry.AmazonOrderId))
+            continue
+
+        log.debug("Address: ")
+        log.debug(entry.ShippingAddress.__dict__)
+        log.debug("type: {}".format(type(entry.ShippingAddress)))
+        log.debug("'AddressLine1' in entry.ShippingAddress: {}".format(
+                  hasattr(entry.ShippingAddress, 'AddressLine1')))
+        log.debug("'AddressLine2' in entry.ShippingAddress: {}".format(
+                  hasattr(entry.ShippingAddress, 'AddressLine2')))
+        log.debug("'AddressLine3' in entry.ShippingAddress: {}".format(
+                  hasattr(entry.ShippingAddress, 'AddressLine3')))
+
         address_lines = []
-        if 'AddressLine1' in entry.ShippingAddress:
+        if hasattr(entry.ShippingAddress, 'AddressLine1'):
             address_lines.append(entry.ShippingAddress.AddressLine1)
-        if 'AddressLine2' in entry.ShippingAddress:
+        if hasattr(entry.ShippingAddress, 'AddressLine2'):
             address_lines.append(entry.ShippingAddress.AddressLine2)
-        if 'AddressLine3' in entry.ShippingAddress:
+        if hasattr(entry.ShippingAddress, 'AddressLine3'):
             address_lines.append(entry.ShippingAddress.AddressLine3)
         street = "\n".join(address_lines)
+        log.debug("Street: {}".format(street))
 
         address, _created = Address.objects.get_or_create(name=entry.ShippingAddress.Name,
                                                           city=entry.ShippingAddress.City,
                                                           street=street,
-                                                          state=entry.ShippingAddress.StateOrRegion,
                                                           postal_code=entry.ShippingAddress.PostalCode,
                                                           country_code=entry.ShippingAddress.CountryCode)
 
@@ -80,14 +94,18 @@ def import_list_of_orders(list_of_orders):
                                                                'marketplace': marketplace,
                                                                'address': address})
         if created:
-            log.info('order: {} created'.format(order))
+            log.info('order: {} created'.format(order.marketplace_order_id))
         else:
-            log.info('order: {} already in the database'.format(order))
+            log.info('order: {} already in the database'.format(order.marketplace_order_id))
 
-        for o in Order.objects.all():
-            pprint(o.__dict__)
-            pprint(o.address.__dict__)
 
-        print("Orders: {}".format(Order.objects.all().count()))
-        print("Address: {}".format(Address.objects.all().count()))
+def get_all_orders(marketplace_name):
+    DATES = [("2014-09-01T00:00:00Z", "2014-10-01T00:00:00Z"),
+             ("2014-10-01T00:00:00Z", "2014-11-01T00:00:00Z"),
+             ("2014-11-01T00:00:00Z", "2014-12-01T00:00:00Z"),
+             ("2014-12-01T00:00:00Z", "2014-12-02T15:00:00Z")]
 
+    for start, end in DATES:
+        print("{} {} {}".format(marketplace_name, start, end))
+        orders = get_list_of_orders(marketplace_name, start, end)
+        import_list_of_orders(orders)

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-import pytest
-from sale.services.order import get_list_of_orders, import_list_of_orders
-from sale.models import Address, Order
-
 import logging
+
+import pytest
+
+from sale.models import Address, Order
+from sale.services.order import get_list_of_orders, import_list_of_orders
+
 logging.basicConfig(filename="boto.log", level=logging.DEBUG)
 
 
@@ -24,3 +26,8 @@ def test_import_list_of_orders():
     assert order.price == 1400
     assert order.address.name == 'Patricia Kürthy'
     assert order.address.postal_code == '90574'
+
+    order = Order.objects.get(marketplace_order_id='303-9419586-4512360')
+    assert order.price == 3300
+    assert order.address.name == "Jan Merkel"
+    assert order.address.street == "Öko Logik\nLahnstr. 16"

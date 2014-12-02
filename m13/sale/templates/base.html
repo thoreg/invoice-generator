@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+{% load static %}
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <title>M13 - Bestellungen</title>
+    <link href="{% static "bootstrap/dist/css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/base.css" %}" rel="stylesheet">
+    {% block extra_css %}
+    {% endblock %}
+
+    <script src="{% static "jquery/dist/jquery.min.js" %}"></script>
+    <script src="{% static "angular/angular.min.js" %}"></script>
+    {% block extra_js %}
+    {% endblock %}
+  </head>
+  <body>
+      {% include "navbar.html" %}
+      {% block extra_content %}
+      {% endblock %}
+      <div class="container main">
+        {% block content %}
+        {% endblock %}
+      </div><!-- /.container -->
+  </body>
+</html>

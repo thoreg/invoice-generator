@@ -4,7 +4,7 @@ import logging
 
 from boto.mws.connection import MWSConnection
 
-from sale.models import Address, Marketplace, Order
+from m13.sale.models import Address, Marketplace, Order
 
 MERCHANT_ID = "A27MO42EOV27PG"
 

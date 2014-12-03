@@ -4,7 +4,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from sale.models import Order, OrderItem
+from m13.sale.models import Order, OrderItem
 
 
 @login_required

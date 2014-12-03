@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from sale.models import Address, Marketplace, Order
+from m13.sale.models import Address, Marketplace, Order
 
 
 class ReadOnlyTabularInline(admin.TabularInline):

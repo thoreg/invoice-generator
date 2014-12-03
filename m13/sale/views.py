@@ -12,7 +12,7 @@ from m13.sale.models import Order, OrderItem
 def index(request):
     context = RequestContext(request)
     context['orders'] = Order.objects.all().order_by('-purchase_time')
-    return render_to_response('index.html', context)
+    return render_to_response('sale/index.html', context)
 
 
 @login_required
@@ -22,4 +22,4 @@ def invoice(request, order_id):
     order = Order.objects.get(marketplace_order_id=order_id)
     context['order'] = order
     context['orderitems'] = OrderItem.objects.filter(order=order)
-    return render_to_response('invoice.html', context)
+    return render_to_response('sale/invoice.html', context)

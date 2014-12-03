@@ -9,7 +9,8 @@
     <a href="/sale/invoice/{{ order.marketplace_order_id }}">
     {{ order.marketplace_order_id }}
     </a>
-    {{ order.address.name }}<br>
+    {{ order.address.name }}
+    {{ order.invoice.invoice_number }}<br>
 {% empty %}
     Keine Bestellungen vorhanden
 {% endfor %}

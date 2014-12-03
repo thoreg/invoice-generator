@@ -1,4 +1,4 @@
-{% load static %}
+{% load static m13 %}
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
@@ -91,7 +91,7 @@
             {% for orderitem in orderitems %}
             <tr>
                 <td style="text-align: left;">
-                    {{ orderitem.product.title }}
+                    {{ orderitem.product.title|remove_m13 }}
                 </td>
                 <td style="width: 10%; float: center;">
                     {{ orderitem.get_single_orderitem_price_as_string }} &euro;

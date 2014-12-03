@@ -1,0 +1,16 @@
+.brand {
+    height: 35px;
+    margin-top: -8px;
+}
+.main {
+    margin-top: 5em;
+}
+
+.navbar-collapse {
+    background-color: #000;
+}
+
+.navbar-inverse {
+    background-color: #000;
+    border-color: #000;
+}

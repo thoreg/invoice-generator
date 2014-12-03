@@ -5,6 +5,6 @@ urlpatterns = patterns(
     '',
     url(r'^addi/', include(admin.site.urls)),
 
-    (r'^sale/api/', include('sale.urls.api')),
+    #(r'^sale/api/', include('sale.urls.api')),
     url(r'^sale/', include('sale.urls.ui')),
 )

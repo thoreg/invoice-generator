@@ -19,7 +19,9 @@ def get_list_of_orders(marketplace_name, start_datetime, end_datetime):
 
     marketplace_id_list = Marketplace.objects.filter(name=marketplace_name) \
                                              .values_list('vendor_id', flat=True)
-    print("  marketplace_id_list: {}".format(marketplace_id_list))
+    print("   marketplace_id_list: {}".format(marketplace_id_list))
+    print("   start: {}".format(start_datetime))
+    print("   end: {}".format(end_datetime))
     response = mws.list_orders(CreatedAfter=start_datetime,
                                CreatedBefore=end_datetime,
                                MarketplaceId=marketplace_id_list)
@@ -103,7 +105,7 @@ def import_all_orders(marketplace_name):
     DATES = [("2014-09-01T00:00:00Z", "2014-10-01T00:00:00Z"),
              ("2014-10-01T00:00:00Z", "2014-11-01T00:00:00Z"),
              ("2014-11-01T00:00:00Z", "2014-12-01T00:00:00Z"),
-             ("2014-12-01T00:00:00Z", "2014-12-02T22:00:00Z")]
+             ("2014-12-01T00:00:00Z", "2014-12-03T00:00:00Z")]
 
     for start, end in DATES:
         print("{} {} {}".format(marketplace_name, start, end))

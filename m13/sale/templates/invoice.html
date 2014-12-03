@@ -1,87 +1,71 @@
+{% load static %}
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>M13 Amazon Invoice Generator</title>
-    <meta name="description" content="Generate Invoices from amazon order report file">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/fileinput.css">
-    <link rel="stylesheet" href="css/invoice.css">
-
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/fileinput.min.js"></script>
-    <script src="js/angular.min.js"></script>
-
+    <link rel="stylesheet" href="{% static "css/invoice.css" %}">
 </head>
 <body>
-<div class="watermark"></div>
-<table class="header">
-<tbody>
-    <tr>
-        <td width="50%">
-            <img src="img/manufaktur13-logo.png" alt="Manufaktur13Logo"/>
-            <div class='logo_caption'>
-                Manufaktur Dreizehn UG (haftungsbeschränkt) &bull; Landsberger Allee 177 &bull; 10369 Berlin
-            </div>
-        </td>
-        <td class="sidebar">
-            <p>
-                Manufaktur Dreizehn UG (haftungsbeschränkt)<br>
-                Landsberger Allee 177<br>
-                D-10369 Berlin<br>
-                Tel.: 030-12016673<br>
-                E-Mail: info@manufaktur13.de<br>
-            </p>
-            <p>
-                Geschäftsführer: David Schirrmeier
-            </p>
-            <p>
-                Bankverbindung: <br>
-                IBAN: DE43 1001 0010 0849 9581 07<br>
-                BIC: PBNKDEFF<br>
-                Postbank<br>
-            </p>
-            <p>
-                Amtsgericht Charlottenburg<br>
-                USt.Nr. DE293216343<br>
-                St.-Nr. 37/492/21865<br>
-                HRB 154621<br>
-            </p>
-        </td>
-    </tr>
-</tbody>
-</table>
-<table class="meta">
-<tbody>
-    <tr>
-        <td>
-            <div class="address">
-                {{ order.address.name }}<br>
-                {{ order.address.street }}<br>
-                {{ order.address.city }}<br>
-                {{ order.address.postal_code}} {{ address.country_code }}
-            </div>
-        </td>
-        <td style="float: right;">
-            <strong>Bestelldatum:</strong> {{ order.purchase_time | date:'dd.MM.yyyy' }}<br>
-            <strong>Rechnungsdatum:</strong> {{ invoice_date | date:'dd.MM.yyyy' }}<br>
-            <strong>Rechnungsnummer:</strong> #B_INVOICE_NUMBER <br>
-            <strong>Versanddatum:</strong> {{ invoice_date | date:'dd.MM.yyyy' }}<br>
-
-        </td>
-
-    </tr>
-</tbody>
-</table>
 <div class="content">
+    <div class="watermark"></div>
+    <table class="header">
+    <tbody>
+        <tr>
+            <td style='text-align: left; width="50%"'>
+                <img src="{% static "img/manufaktur13-logo.png" alt="Manufaktur13Logo" %}"/>
+                <div class='logo_caption'>
+                    Manufaktur Dreizehn UG (haftungsbeschränkt) &bull; Landsberger Allee 177 &bull; 10369 Berlin
+                </div>
+            </td>
+            <td class="sidebar">
+                <p>
+                    Manufaktur Dreizehn UG (haftungsbeschränkt)<br>
+                    Landsberger Allee 177<br>
+                    D-10369 Berlin<br>
+                    Tel.: 030-12016673<br>
+                    E-Mail: info@manufaktur13.de<br>
+                </p>
+                <p>
+                    Geschäftsführer: David Schirrmeier
+                </p>
+                <p>
+                    Bankverbindung: <br>
+                    IBAN: DE43 1001 0010 0849 9581 07<br>
+                    BIC: PBNKDEFF<br>
+                    Postbank<br>
+                </p>
+                <p>
+                    Amtsgericht Charlottenburg<br>
+                    USt.Nr. DE293216343<br>
+                    St.-Nr. 37/492/21865<br>
+                    HRB 154621<br>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+    <table class="meta">
+    <tbody>
+        <tr>
+            <td style="text-align: left;">
+                <div class="address">
+                    {{ order.address.name }}<br>
+                    {{ order.address.street }}<br>
+                    {{ order.address.city }}<br>
+                    {{ order.address.postal_code}} {{ address.country_code }}
+                </div>
+            </td>
+            <td style="float: right; text-align: right;">
+                <strong>Bestelldatum:</strong> {{ order.purchase_time | date:'d.m.Y' }}<br>
+                <strong>Versanddatum:</strong> {{ order.invoice.issue_time | date:'d.m.Y' }}<br>
+                <strong>Rechnungsdatum:</strong> {{ order.invoice.creation_time | date:'d.m.Y' }}<br>
+                <strong>Rechnungsnummer:</strong> {{ order.invoice.invoice_number }}<br>
+
+            </td>
+
+        </tr>
+    </tbody>
+    </table>
     <div class="subject">
         Rechnung für die Bestellung: {{ order.marketplace_order_id }}
     </div>
@@ -95,33 +79,35 @@
     <table class="items">
         <thead>
             <tr>
-                <th>Bezeichnung</th>
-                <th>Anzahl</th>
-                <th>Netto</th>
-                <th>MwSt.</th>
+                <th style="text-align: left;">Bezeichnung</th>
+                <th style="width: 10%; float: center;">Einzelpreis</th>
+                <th style="width: 10%; float: center;">Anzahl</th>
+                <th style="width: 10%; float: center;">Netto</th>
+                <th style="width: 10%; float: center;">MwSt.</th>
                 <th style="float: right;">Brutto</th>
             </tr>
         </thead>
         <tbody>
             {% for orderitem in orderitems %}
             <tr>
-                <td>
+                <td style="text-align: left;">
                     {{ orderitem.product.title }}
                 </td>
-                <td style="float: center;">
+                <td style="width: 10%; float: center;">
+                    {{ orderitem.get_single_orderitem_price_as_string }} &euro;
+                </td>
+                <td>
                     {{ orderitem.quantity }}
                 </td>
                 <td>
-                netto
-                    {{ orderitem.price }} &euro;
+                    {{ orderitem.get_netto_price_as_string }} &euro;
                 </td>
-               <td>
+                <td>
                    19%
-               </td>
-               <td style="float: right;">
-                brutto
-                   {{ orderitem.price }} &euro;
-               </td>
+                </td>
+                <td style="float: right;">
+                   {{ orderitem.get_brutto_price_as_string }} &euro;
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -129,18 +115,20 @@
 
     <table width="100%" style="margin-top: 1em;">
         <tbody>
+            {% for orderitem in orderitems %}
             <tr style="border-top: 2px solid #000;">
-                <td>Versandkosten</td>
+                <td style="text-align: right;">Versandkosten</td>
                 <td style="float: right;">
-                    {{ shipping_price_sum }} &euro;
+                    {{ orderitem.get_shipping_price_as_string }} &euro;
                 </td>
             </tr>
+            {% endfor %}
             <tr>
-                <td>
+                <td style="text-align: right;">
                     <strong>Gesamtpreis:</strong>
                 </td>
                 <td style="float: right; border-bottom: 2px solid #000;">
-                    <strong>{{ total_sum }} &euro;</strong>
+                    <strong>{{ order.get_total_sum_as_string }} &euro;</strong>
                 </td>
             </tr>
         </tbody>

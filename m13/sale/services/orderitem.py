@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
-#
 import logging
+from datetime import date, datetime, timedelta
 
 from boto.mws.connection import MWSConnection
 
 from sale.models import Order, OrderItem, Product, Marketplace
+from sale.services.order import get_list_of_orders, import_list_of_orders
+from sale.services.invoice import create_invoice_for_order
+
 
 MERCHANT_ID = "A27MO42EOV27PG"
 
@@ -21,6 +24,8 @@ def get_orderitems(order_id):
 
 
 def import_orderitems(marketplace_order_id):
+
+    print("\nImport OrderItems for Order: {}".format(marketplace_order_id))
     try:
         order = Order.objects.get(marketplace_order_id=marketplace_order_id)
     except Order.DoesNotExist():
@@ -63,3 +68,23 @@ def import_all_orderitems(marketplace_name):
     print("We got {} orders".format(len(orders)))
     for order in orders:
         import_orderitems(order.marketplace_order_id)
+        create_invoice_for_order(order)
+
+
+def import_orderitems_of_today(marketplace_name):
+    start = date.today().strftime('%Y-%m-%dT00:00:00Z')
+    print(datetime.now())
+    end = datetime.now() - timedelta(minutes=90)
+    end = end.strftime('%Y-%m-%dT%H:%M:%SZ')
+    print("Import OrderItems from {} till {} for {}".format(
+        start, end, marketplace_name))
+
+    list_of_orders = get_list_of_orders(marketplace_name, start, end)
+    import_list_of_orders(list_of_orders)
+
+    orders_of_today = Order.objects.filter(insert_time__range=(start, end))
+    print("We got {} orders today".format(len(orders_of_today)))
+
+    for order in orders_of_today:
+        import_orderitems(order.marketplace_order_id)
+        create_invoice_for_order(order)

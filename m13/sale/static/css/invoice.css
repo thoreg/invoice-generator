@@ -1,0 +1,70 @@
+
+.content {
+    font-size: 12pt;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.header {
+    width: 100%;
+}
+
+.logo_caption {
+    margin-left: 0px;
+}
+
+.meta {
+    margin: 30px 0;
+    width: 100%;
+}
+
+.items {
+    width: 100%;
+}
+
+.sidebar {
+    font-size: 9px;
+    text-align: right;
+    margin-top: 20px;
+}
+
+.subject {
+    font-weight: bold;
+    margin: 3em 0;
+}
+
+.thx {
+    margin-top: 20px;
+}
+
+td {
+    text-align: center;
+}
+
+@media print {
+
+    .meta {
+        margin-top: 25pt;
+        margin-bottom: 25pt;
+        font-size: 14pt;
+    }
+
+    .logo_caption {
+        font-size: 9pt;
+        margin-left: 15pt;
+        margin-top: 7pt;
+    }
+
+    .sidebar {
+        font-size: 10pt;
+        padding-top: 30pt;
+    }
+
+    .watermark::before {
+        content: url(../img/m13_invoice_bg.jpg);
+        position: absolute;
+        top: -50pt;
+        opacity: 0.33;
+    }
+
+}

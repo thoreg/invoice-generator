@@ -53,22 +53,19 @@ def import_list_of_orders(list_of_orders):
 
     for entry in list_of_orders:
 
-        log.debug("\nEntry: ")
-        log.debug(entry.__dict__)
+        print("\nEntry: ")
+        print(entry.__dict__)
 
         if entry.OrderStatus == 'Canceled':
-            log.info('order: {} canceled - skipping'.format(entry.AmazonOrderId))
+            print('order: {} canceled - skipping'.format(entry.AmazonOrderId))
             continue
 
-        log.debug("Address: ")
-        log.debug(entry.ShippingAddress.__dict__)
-        log.debug("type: {}".format(type(entry.ShippingAddress)))
-        log.debug("'AddressLine1' in entry.ShippingAddress: {}".format(
-                  hasattr(entry.ShippingAddress, 'AddressLine1')))
-        log.debug("'AddressLine2' in entry.ShippingAddress: {}".format(
-                  hasattr(entry.ShippingAddress, 'AddressLine2')))
-        log.debug("'AddressLine3' in entry.ShippingAddress: {}".format(
-                  hasattr(entry.ShippingAddress, 'AddressLine3')))
+        if entry.ShippingAddress is None:
+            print('order: {} no shipping address - skipping'.format(entry.AmazonOrderId))
+            continue
+
+        print("Address: ")
+        print(entry.ShippingAddress.__dict__)
 
         address_lines = []
         if hasattr(entry.ShippingAddress, 'AddressLine1'):

@@ -60,7 +60,7 @@ td {
         padding-top: 30pt;
     }
 
-    .watermark::before {
+    .watermark {
         content: url(../img/m13_invoice_bg.jpg);
         position: absolute;
         top: -50pt;

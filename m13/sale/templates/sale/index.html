@@ -1,9 +1,20 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_js %}
+   <script src="{% static "js/app.js" %}"></script>
+   <script src="{% static "js/orderitem.ajax.js" %}"></script>
+{% endblock %}
+
 {% block content %}
 <h1>Bestellungen</h1>
-
+<div ng-app="orderitemImport" ng-controller="AppController as ctrl">
+    <div class="pull-right">
+        <button type="button" class="btn btn-primary" ng-click="ctrl.import_orderitems_of_today()">
+            Heute importieren
+        </button>
+    </div>
+</div>
 {% for order in orders %}
     {{ order.purchase_time | date:"Y m d H:i" }} -
     <a href="/sale/invoice/{{ order.marketplace_order_id }}">

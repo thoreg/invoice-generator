@@ -72,7 +72,8 @@ def import_all_orderitems(marketplace_name):
 
 
 def import_orderitems_of_today(marketplace_name):
-    start = date.today().strftime('%Y-%m-%dT00:00:00Z')
+    start = date.today() - timedelta(days=1)
+    start = start.strftime('%Y-%m-%dT00:00:00Z')
     print(datetime.now())
     end = datetime.now() - timedelta(minutes=90)
     end = end.strftime('%Y-%m-%dT%H:%M:%SZ')

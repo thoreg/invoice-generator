@@ -45,6 +45,14 @@ class Order(models.Model):
     def get_total_sum_as_string(self):
         return str(Decimal('{0:.2f}'.format(self.get_total_sum())))
 
+    def get_invoice_number(self):
+        try:
+            invoice_number = Invoice.objects.get(order=self).invoice_number
+        except Invoice.DoesNotExist:
+            invoice_number = "Noch nicht vorhanden"
+
+        return invoice_number
+
 
 class InvoiceNumber(models.Model):
     marketplace = models.ForeignKey(Marketplace)

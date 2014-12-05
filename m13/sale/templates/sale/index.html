@@ -4,6 +4,7 @@
 {% block extra_js %}
    <script src="{% static "js/app.js" %}"></script>
    <script src="{% static "js/orderitem.ajax.js" %}"></script>
+   <script src="{% static "js/orderitem.data.js" %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -14,17 +15,17 @@
             Heute importieren
         </button>
     </div>
+    {% verbatim %}
+    Anzahl: {{ number_of_results() }}<br>
+    <div ng-repeat="order in list_of_orders() | orderBy: 'purchase_time' : true">
+        {{ order.marketplace_name }} -
+        {{ order.purchase_time }} -
+        <a href="/sale/invoice/{{ order.marketplace_order_id }}">
+            {{ order.marketplace_order_id }}
+        </a>
+        -
+        {{ order.customer_name }} -
+        {{ order.invoice_number }}<br>
+    </div>
+    {% endverbatim %}
 </div>
-{% for order in orders %}
-    {{ order.purchase_time | date:"Y m d H:i" }} -
-    <a href="/sale/invoice/{{ order.marketplace_order_id }}">
-    {{ order.marketplace_order_id }}
-    </a>
-    -
-    {{ order.address.name }} -
-    {{ order.invoice.invoice_number }}<br>
-{% empty %}
-    Keine Bestellungen vorhanden
-{% endfor %}
-
-{% endblock %}

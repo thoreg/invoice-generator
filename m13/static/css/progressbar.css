@@ -1,0 +1,66 @@
+#wrapper {
+  width: 200px;
+  height: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+#border {
+  border: 3px solid #222;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  left: -50%;
+  top: -50%;
+  padding: 4px 3px;
+}
+
+#whitespace {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+}
+
+#line {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  -webkit-animation: slide 5s steps(40) infinite;
+  -moz-animation: slide 5s steps(40) infinite;
+  animation: slide 5s steps(40) infinite;
+}
+
+@keyframes slide {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+@-moz-keyframes slide {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+@-webkit-keyframes slide {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}

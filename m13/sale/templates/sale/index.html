@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_css %}
+    <link href="{% static "css/progressbar.css" %}" rel="stylesheet">
+{% endblock %}
+
 {% block extra_js %}
    <script src="{% static "js/app.js" %}"></script>
    <script src="{% static "js/orderitem.ajax.js" %}"></script>
@@ -10,22 +14,28 @@
 {% block content %}
 <h1>Bestellungen</h1>
 <div ng-app="orderitemImport" ng-controller="AppController as ctrl">
-    <div class="pull-right">
-        <button type="button" class="btn btn-primary" ng-click="ctrl.import_orderitems_of_today()">
-            Heute importieren
-        </button>
+    {% include "progressbar.html" %}
+    <div ng-hide="loading">
+        <div class="pull-right">
+            <button type="button" class="btn btn-primary"
+                    ng-click="ctrl.import_orderitems_of_today()"
+                    ng-disabled="loading">
+                Heute importieren
+            </button>
+        </div>
+        {% verbatim %}
+        Anzahl: {{ number_of_results() }}<br>
+        <div ng-repeat="order in list_of_orders() | orderBy: 'purchase_time' : true">
+            {{ order.marketplace_name }} -
+            {{ order.purchase_time }} -
+            <a href="/sale/invoice/{{ order.marketplace_order_id }}">
+                {{ order.marketplace_order_id }}
+            </a>
+            -
+            {{ order.customer_name }} -
+            {{ order.invoice_number }}<br>
+        </div>
+        {% endverbatim %}
     </div>
-    {% verbatim %}
-    Anzahl: {{ number_of_results() }}<br>
-    <div ng-repeat="order in list_of_orders() | orderBy: 'purchase_time' : true">
-        {{ order.marketplace_name }} -
-        {{ order.purchase_time }} -
-        <a href="/sale/invoice/{{ order.marketplace_order_id }}">
-            {{ order.marketplace_order_id }}
-        </a>
-        -
-        {{ order.customer_name }} -
-        {{ order.invoice_number }}<br>
-    </div>
-    {% endverbatim %}
 </div>
+{% endblock %}

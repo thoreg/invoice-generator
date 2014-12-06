@@ -24,19 +24,23 @@ orderitemImport.controller('AppController', ['$scope', 'orderitemFactory', 'orde
     self.init();
 
     self.import_orderitems_of_today = function() {
+        $scope.loading = true;
         orderitemFactory.importOrderItemsOfToday()
         .success(function(data) {
             orderitemFactory.getListOfOrders()
             .success(function(data) {
                 orders.reset();
                 orders.add_multiple_orders(data);
+                $scope.loading = false;
             })
             .error(function(data) {
                 console.log('GetListOfOrders: FAIL');
+                $scope.loading = false;
             });
         })
         .error(function() {
             console.log("Import OrderItems of today failed");
+            $scope.loading = false;
         });
     };
 }]);

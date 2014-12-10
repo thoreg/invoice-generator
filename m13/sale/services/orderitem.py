@@ -72,9 +72,9 @@ def import_all_orderitems(marketplace_name):
 
 
 def import_orderitems_of_today(marketplace_name):
+    marketplace = Marketplace.objects.filter(name=marketplace_name)
     start = date.today() - timedelta(days=1)
     start = start.strftime('%Y-%m-%dT00:00:00Z')
-    print(datetime.now())
     end = datetime.now() - timedelta(minutes=90)
     end = end.strftime('%Y-%m-%dT%H:%M:%SZ')
     print("Import OrderItems from {} till {} for {}".format(
@@ -83,7 +83,7 @@ def import_orderitems_of_today(marketplace_name):
     list_of_orders = get_list_of_orders(marketplace_name, start, end)
     import_list_of_orders(list_of_orders)
 
-    orders_of_today = Order.objects.filter(insert_time__range=(start, end))
+    orders_of_today = Order.objects.filter(marketplace=marketplace, insert_time__range=(start, end))
     print("We got {} orders today".format(len(orders_of_today)))
 
     for order in orders_of_today:

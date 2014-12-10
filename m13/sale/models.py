@@ -19,7 +19,7 @@ class Marketplace(models.Model):
     vendor_id = models.CharField(max_length=14)
 
     def __str__(self):
-        return self.name
+        return "%s" % self.name
 
 
 class Order(models.Model):
@@ -32,7 +32,7 @@ class Order(models.Model):
     address = models.ForeignKey(Address)
 
     def __str__(self):
-        return self.marketplace_order_id
+        return "%s" % self.marketplace_order_id
 
     def get_total_sum(self):
         sum = 0
@@ -124,7 +124,7 @@ class OrderItem(models.Model):
     price = models.IntegerField()
 
     def __str__(self):
-        return self.marketplace_orderitem_id
+        return "%s" % self.marketplace_orderitem_id
 
     def get_netto_price_as_string(self):
         return str(Decimal('{0:.2f}'.format(self.price / 119)))

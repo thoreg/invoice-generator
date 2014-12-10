@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from m13.sale.models import Address, Marketplace, Order, Invoice
+from m13.sale.models import Address, Marketplace, Order, OrderItem, Invoice
 
 
 class ReadOnlyTabularInline(admin.TabularInline):
@@ -27,7 +27,11 @@ class OrderInline(ReadOnlyTabularInline):
     model = Order
 
 
-class InvoiceInline(ReadOnlyTabularInline):
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+
+
+class InvoiceInline(admin.TabularInline):
     model = Invoice
 
 
@@ -41,7 +45,7 @@ class AddressAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('marketplace_order_id',)
     inlines = [
-        InvoiceInline,
+        OrderItemInline,
     ]
 
 
